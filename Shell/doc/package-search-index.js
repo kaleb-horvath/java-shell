@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"m":"Shell","l":"org.eclipse.shell"}];updateSearchResults();

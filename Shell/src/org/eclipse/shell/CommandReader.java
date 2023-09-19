@@ -2,9 +2,6 @@
 package org.eclipse.shell;
 
 import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.Arrays;
-import java.util.regex.Pattern;
 
 import java.io.Reader;
 import java.io.InputStreamReader;
@@ -19,55 +16,43 @@ import java.io.IOException;
  * 
  * NOTE: For now, it contains the read-eval-print loop and will orchestrate 
  * other functionality such as tokenization, parsing, and evaluation.
- * 
- * TODO:
- * - Implement content method with StringBuilder
- *  
- * 
- * @author kaleb-horvath
- * @license GPLv3
- * @email kalebhorvath23@gmail.com
- * @version 0.0.1
  */
-
 public class CommandReader {
 	
 	private boolean isRepl;
-	private boolean running;
-	
+	private boolean reading;
 	private Reader stdin;
 	private BufferedReader bufferedReader;
 	private FileReader fileReader;
 	private File file;
 	private ArrayList<String> lines;
-	
 	private StringBuilder content;
 	
 	
 	// default constructor requires no arguments (REPL case)
-	public CommandReader ()
+	CommandReader ()
 	{
-		isRepl = true; 
+		this.isRepl = true; 
 		
 		// allocate necessary objects
-		stdin = new InputStreamReader(System.in);
-		bufferedReader = new BufferedReader(stdin);
-		content = new StringBuilder();
+		this.stdin = new InputStreamReader(System.in);
+		this.bufferedReader = new BufferedReader(stdin);
+		this.content = new StringBuilder();
 	}
 	
 	// secondary constructor (file case)
-	public CommandReader (String filePath)
+	CommandReader (String filePath)
 	{
 		// allocate necessary objects
-		bufferedReader = new BufferedReader(stdin);
+		this.bufferedReader = new BufferedReader(stdin);
 		
 		// check file
-		file = new File(filePath);
+		this.file = new File(filePath);
 		if (file.exists() && !file.isDirectory()) 
 		{
 			readFile(file);
-			isRepl = false;
-			file = null; 	// mark for GC
+			this.isRepl = false;
+			this.file = null; 	// mark for GC
 		} 
 		else 
 		{
@@ -88,14 +73,14 @@ public class CommandReader {
 	}
 	
 
-	public void readLoop (String prompt)
+	public void readLineLoop (String prompt)
 	{
-		running = true;
+		this.reading = true;
 		
 		try {
 			String str;
 			
-			while (running) 
+			while (reading) 
 			{
 				// simple echo 
 				System.out.print(prompt + " ");
@@ -104,13 +89,13 @@ public class CommandReader {
 				if (str == null) 
 				{
 					// will catch EOF even if 'Shell' is not interactive
-					running = false; 
+					this.reading = false; 
 				}
 				/**
 				 * Instead of simply echoing, lets put the str somewhere 
 				 */
-				content.append(str);
-				System.out.println("--> " + str);
+				this.content.append(str);
+				System.out.println("--> " + content);
 				// X.tokenize(str)...
 				// i.eval(tokens); .. or something
 			}
@@ -126,13 +111,13 @@ public class CommandReader {
 		String filePath = file.getPath();
 		
 		try {
-			fileReader = new FileReader(filePath);
-			bufferedReader = new BufferedReader(fileReader);	
+			this.fileReader = new FileReader(filePath);
+			this.bufferedReader = new BufferedReader(fileReader);	
 			
 			String line = bufferedReader.readLine();
 			while (line != null)
 			{
-				lines.add(line);
+				this.lines.add(line);
 				line = bufferedReader.readLine();
 			}
 			

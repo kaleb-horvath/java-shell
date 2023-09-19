@@ -1,7 +1,8 @@
 
 
 ### Ideas
-
+* data structure to hold Token nodes so that robust error handling and feedback is possible even with duplicate tokens
+* Should handle strings just fine :)
 * Parser should use a full-blow Regex pattern
 * In-memory command history with Linked List (See stack overflow article)
   * Serialize the LL and load from file at start-time (See CPSC2108 Graph project)
@@ -19,6 +20,9 @@
 
 ### DevOps Stuff
 
+* Possible complexity reduction by eliminating seperated passes in CommandLexer
+* Should be an Error class and a debugMode in main class with a String long of some sort
+* Every class should have an overriden toString method and Node/Tokens etc should have an overriden equals method
 * Unit and regression tests in Java
   * Should regression test use a shell script to test program?
     * i.e. listen for piped input to the program and eval-print?

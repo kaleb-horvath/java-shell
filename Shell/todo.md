@@ -2,11 +2,13 @@
 
 ### Ideas
 * data structure to hold Token nodes so that robust error handling and feedback is possible even with duplicate tokens
+		(LL of tokens, walk LL and put operators and Head Nodes on Queue)
+* regex should only allow tokens that match expected grammars make sure this is the case with your current pattern strings
 * Should handle strings just fine :)
 * Parser should use a full-blow Regex pattern
 * In-memory command history with Linked List (See stack overflow article)
   * Serialize the LL and load from file at start-time (See CPSC2108 Graph project)
-  * Raises the issue of a fully interactive shell allowing for Signal sending via keyboard shortcuts, how do we configure this?
+  * Raises the issue of a **fully interactive shell** allowing for Signal sending via keyboard shortcuts, how do we configure this?
     *  ^[[A ^[[B  (Key Up Key Down respectively)
     * Ctrl+D (EOF)
     * Ctrl+C (KeyboardInterrupt)

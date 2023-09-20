@@ -1,11 +1,13 @@
 
-package org.eclipse.shell;
+package org.eclipse.command;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.eclipse.shell.ShellError;
 
 /**
  * Responsible for tokenizing a command and verifying grammars.
@@ -31,13 +33,13 @@ public class CommandLexer {
 	//private final String outputRedirectGrammar = "";
 	//private final String stringLiteralGrammar = "";
 	
-	CommandLexer (String readerString)
+	public CommandLexer (String readerString)
 	{
 		this.command = readerString;
 		this.matches = new ArrayList<String>();
 		this.tokens = new ArrayList<String>();
 	}
-	
+		
 	public ArrayList<String> getTokens ()
 	{
 		if (passing)
@@ -50,7 +52,12 @@ public class CommandLexer {
 	{
 		if (!initialPass())
 		{
-			System.out.println("Command string does not match expected grammar.");	
+			
+			(new ShellError(
+					"Command string does not match expected grammar",
+					(String) this.getClass().getCanonicalName(),
+					null,
+					true)).call();
 		}
 		else
 		{

@@ -4,6 +4,10 @@
 * data structure to hold Token nodes so that robust error handling and feedback is possible even with duplicate tokens
 		(LL of tokens, walk LL and put operators and Head Nodes on Queue)
 * regex should only allow tokens that match expected grammars make sure this is the case with your current pattern strings
+* good debug and error printing
+* true Shell driver in org.eclipse.shell program that wraps readLineLoop() and handles false return??
+* Token object should override toString and equals
+* Consider a slice to get parameters
 * Should handle strings just fine :)
 * Parser should use a full-blow Regex pattern
 * In-memory command history with Linked List (See stack overflow article)

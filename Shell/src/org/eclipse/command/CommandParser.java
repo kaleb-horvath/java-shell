@@ -1,4 +1,4 @@
-package org.eclipse.shell;
+package org.eclipse.command;
 
 /**
  * 

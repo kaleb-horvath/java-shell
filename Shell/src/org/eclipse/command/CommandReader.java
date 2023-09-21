@@ -3,6 +3,8 @@ package org.eclipse.command;
 
 import java.util.ArrayList;
 
+import org.eclipse.shell.ShellError;
+
 import java.io.Reader;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
@@ -20,7 +22,7 @@ import java.io.IOException;
 public class CommandReader {
 	
 	private boolean isRepl;
-	private boolean reading;
+	private boolean running;
 	private Reader stdin;
 	private BufferedReader bufferedReader;
 	private FileReader fileReader;
@@ -30,34 +32,35 @@ public class CommandReader {
 	
 	
 	// default constructor requires no arguments (REPL case)
-	CommandReader ()
+	public CommandReader ()
 	{
 		this.isRepl = true; 
-		
-		// allocate necessary objects
 		this.stdin = new InputStreamReader(System.in);
 		this.bufferedReader = new BufferedReader(stdin);
 		this.content = new StringBuilder();
 	}
 	
-	// secondary constructor (file case)
-	CommandReader (String filePath)
+
+	public CommandReader (String filePath)
 	{
-		// allocate necessary objects
+		this.stdin = new InputStreamReader(System.in);
 		this.bufferedReader = new BufferedReader(stdin);
-		
+		this.lines = new ArrayList<>();
+
 		// check file
 		this.file = new File(filePath);
 		if (file.exists() && !file.isDirectory()) 
 		{
+			System.out.println("Reading file");
 			readFile(file);
 			this.isRepl = false;
-			this.file = null; 	// mark for GC
 		} 
 		else 
 		{
-			System.out.println("File path not found or not a file.");
-			System.exit(-1);
+			(new ShellError(
+					String.format("File path not found or not a file \'%s\'", filePath),
+					(String) this.getClass().getCanonicalName(),
+					null, true)).call();
 		}
 	}
 	
@@ -68,19 +71,18 @@ public class CommandReader {
 			return lines;
 		else
 			// is this fault tolerance necessary?
-			System.out.println("This Reader is a REPL. Returning empty List.");
 			return new ArrayList<String>();
 	}
 	
 
 	public void readLineLoop (String prompt)
 	{
-		this.reading = true;
+		this.running = true;
 		
 		try {
 			String str;
 			
-			while (reading) 
+			while (running) 
 			{
 				// simple echo 
 				System.out.print(prompt + " ");
@@ -89,7 +91,7 @@ public class CommandReader {
 				if (str == null) 
 				{
 					// will catch EOF even if 'Shell' is not interactive
-					this.reading = false; 
+					this.running = false; 
 				}
 				/**
 				 * Instead of simply echoing, lets put the str somewhere 
@@ -101,13 +103,17 @@ public class CommandReader {
 			}
 			
 		} catch (Exception e) {
-			System.out.println("Problem opening stdin for reading.");
+			(new ShellError(
+					"Problem opening stdin for reading",
+					(String) this.getClass().getCanonicalName(),
+					e, true)).call();
 		}
 	}
 	
 	
 	private void readFile (File file) 
 	{
+		this.running = true;
 		String filePath = file.getPath();
 		
 		try {
@@ -115,17 +121,27 @@ public class CommandReader {
 			this.bufferedReader = new BufferedReader(fileReader);	
 			
 			String line = bufferedReader.readLine();
-			while (line != null)
+			while (running)
 			{
-				this.lines.add(line);
-				line = bufferedReader.readLine();
+				if (line != null)
+				{
+					this.lines.add(line);
+					line = bufferedReader.readLine();
+				}
+				else {
+					this.running = false;
+				}
+
 			}
 			
 			bufferedReader.close();
 			
 		} catch (IOException e) {
-			System.out.println("Problem opening file for reading.");
-			System.exit(-1);
+			(new ShellError(
+					"Problem opening file for reading. Check permissions.",
+					(String) this.getClass().getCanonicalName(),
+					e, true)).call();
 		}
 	}
 }
+

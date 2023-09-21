@@ -17,7 +17,7 @@ import org.eclipse.shell.ShellError;
  * - How do we get command?
  * - Tokenize a command using Regexp 
  */
-public class CommandLexer {
+public class CommandLexerDepricated {
 
 	private boolean passing;
 	
@@ -33,13 +33,15 @@ public class CommandLexer {
 	//private final String outputRedirectGrammar = "";
 	//private final String stringLiteralGrammar = "";
 	
-	public CommandLexer (String readerString)
+	
+	public CommandLexerDepricated (String readerString)
 	{
 		this.command = readerString;
 		this.matches = new ArrayList<String>();
 		this.tokens = new ArrayList<String>();
 	}
 		
+	
 	public ArrayList<String> getTokens ()
 	{
 		if (passing)
@@ -48,6 +50,7 @@ public class CommandLexer {
 		return new ArrayList<String>();
 	}
 	 
+	
 	public void lex ()
 	{
 		if (!initialPass())
@@ -94,6 +97,7 @@ public class CommandLexer {
 		}
 	}
 	
+	
 	private boolean initialPass ()
 	{
 		boolean pass;
@@ -110,6 +114,7 @@ public class CommandLexer {
 
 		return pass;
 	}
+	
 	
 	private boolean finalPass ()
 	{	
@@ -135,6 +140,7 @@ public class CommandLexer {
 		
 		return pass;
 	}
+	
 	
 	private void tokenizeCommand ()
 	{

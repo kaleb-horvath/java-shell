@@ -14,7 +14,7 @@ public class ShellError {
 	public ShellError (String message, String offendingClass, Exception exception, boolean exit)
 	{
 		this.offendingClassName = offendingClass;
-		this.className = this.getClass().getCanonicalName();
+		this.className = "ShellError";
 		this.exit = exit;
 		this.exception = exception;
 		this.errorString = "[!] %s: From %s: %s\n";

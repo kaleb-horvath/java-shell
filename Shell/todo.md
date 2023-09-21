@@ -1,6 +1,8 @@
 
 
 ### Ideas
+		 * NOTE: Is a tree a better parse structure rather than a Queue? given the async operator?
+		 * NOTE: Separate package for Token and TokenLinkedList? and Queue will be in command package?
 * data structure to hold Token nodes so that robust error handling and feedback is possible even with duplicate tokens
 		(LL of tokens, walk LL and put operators and Head Nodes on Queue)
 * regex should only allow tokens that match expected grammars make sure this is the case with your current pattern strings
